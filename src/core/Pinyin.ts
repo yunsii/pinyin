@@ -1,0 +1,193 @@
+// 为了方便理解，对于下述概念统一在代码中使用全拼变量名
+//
+// * 拼音 - Pinyin / pinyin
+// * 全拼 - Quanpin / quanpin
+// * 双拼 - Shuangpin / Shuangpin
+// * 声母 - Shengmu / shengmu
+
+/** 全拼编码枚举 */
+export enum Quanpin {
+  // 单韵母
+  a = 'a',
+  o = 'o',
+  e = 'e',
+  i = 'i',
+  u = 'u',
+  v = 'v',
+
+  // 复韵母
+  ai = 'ai',
+  ei = 'ei',
+  ui = 'ui',
+  ao = 'ao',
+  ou = 'ou',
+  iu = 'iu',
+  ie = 'ie',
+  ve = 've',
+  er = 'er',
+  an = 'an',
+  en = 'en',
+  in = 'in',
+  un = 'un',
+  vn = 'vn',
+  ang = 'ang',
+  eng = 'eng',
+  ing = 'ing',
+  ong = 'ong',
+
+  // 声母
+  b = 'b',
+  p = 'p',
+  m = 'm',
+  f = 'f',
+  d = 'd',
+  t = 't',
+  n = 'n',
+  l = 'l',
+  g = 'g',
+  k = 'k',
+  h = 'h',
+  j = 'j',
+  q = 'q',
+  x = 'x',
+  z = 'z',
+  c = 'c',
+  s = 's',
+  zh = 'zh',
+  ch = 'ch',
+  sh = 'sh',
+  r = 'r',
+  y = 'y',
+  w = 'w',
+
+  // 整体认读音节
+  zhi = 'zhi',
+  chi = 'chi',
+  shi = 'shi',
+  ri = 'ri',
+  zi = 'zi',
+  ci = 'ci',
+  si = 'si',
+  yi = 'yi',
+  wu = 'wu',
+  yu = 'yu',
+  ye = 'ye',
+  yue = 'yue',
+  yuan = 'yuan',
+  yin = 'yin',
+  yun = 'yun',
+  ying = 'ying',
+}
+
+/** 双拼通用编码枚举 */
+export enum Shuangpin {
+  // 单韵母
+  a = 'a',
+  o = 'o',
+  e = 'e',
+  i = 'i',
+  u = 'u',
+  v = 'v',
+
+  // 复韵母
+  ai = 'ai',
+  ei = 'ei',
+  ui = 'ui',
+  ao = 'ao',
+  ou = 'ou',
+  iu = 'iu',
+  ie = 'ie',
+  ve = 've',
+  // er = 'er',
+  an = 'an',
+  en = 'en',
+  in = 'in',
+  un = 'un',
+  vn = 'vn',
+  ang = 'ang',
+  eng = 'eng',
+  ing = 'ing',
+  ong = 'ong',
+
+  // 声母
+  b = 'b',
+  p = 'p',
+  m = 'm',
+  f = 'f',
+  d = 'd',
+  t = 't',
+  n = 'n',
+  l = 'l',
+  g = 'g',
+  k = 'k',
+  h = 'h',
+  j = 'j',
+  q = 'q',
+  x = 'x',
+  z = 'z',
+  c = 'c',
+  s = 's',
+  zh = 'zh',
+  ch = 'ch',
+  sh = 'sh',
+  r = 'r',
+  y = 'y',
+  w = 'w',
+
+  // 双拼方案中的特殊编码
+  ua = 'ua',
+  uai = 'uai',
+  uan = 'uan',
+  uang = 'uang',
+  /** 等同于 ve */
+  ue = 'ue',
+  uo = 'uo',
+  ia = 'ia',
+  iao = 'iao',
+  ian = 'ian',
+  iang = 'iang',
+  iong = 'iong',
+}
+
+/** 声母列表 */
+export const ShengmuList = [
+  Shuangpin.b,
+  Shuangpin.p,
+  Shuangpin.m,
+  Shuangpin.f,
+  Shuangpin.d,
+  Shuangpin.t,
+  Shuangpin.n,
+  Shuangpin.l,
+  Shuangpin.g,
+  Shuangpin.k,
+  Shuangpin.h,
+  Shuangpin.j,
+  Shuangpin.q,
+  Shuangpin.x,
+  Shuangpin.z,
+  Shuangpin.c,
+  Shuangpin.s,
+  Shuangpin.zh,
+  Shuangpin.ch,
+  Shuangpin.sh,
+  Shuangpin.r,
+  Shuangpin.y,
+  Shuangpin.w,
+];
+
+/** 双拼零声母枚举 */
+export enum ZeroShengmu {
+  a = 'a',
+  ai = 'ai',
+  an = 'an',
+  ang = 'ang',
+  ao = 'ao',
+  e = 'e',
+  ei = 'ei',
+  en = 'en',
+  eng = 'eng',
+  er = 'er',
+  o = 'o',
+  ou = 'ou',
+}
