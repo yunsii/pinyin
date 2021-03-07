@@ -1,0 +1,26 @@
+@import (reference) '@/core/theme.less';
+
+@container-padding: 16px;
+@char-box-size: 200px;
+
+.container {
+  // https://neumorphism.io/
+  border-radius: 8px;
+  background: @primary-color;
+  box-shadow: 8px 8px 12px #949494, -8px -8px 12px #ffffff;
+
+  padding: @container-padding;
+  width: @char-box-size;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.char {
+  font-size: 120px;
+  text-align: center;
+  width: @char-box-size;
+  height: @char-box-size;
+  user-select: none;
+}

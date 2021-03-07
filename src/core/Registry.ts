@@ -1,12 +1,13 @@
-import SchemaRegister from './SchemaRegister';
+import PinyinSchemaRegister from './PinyinSchemaRegister';
 import TextRegister from './TextRegister';
 
 export default class Registry {
-  public static schema: SchemaRegister = new SchemaRegister();
+  public static schema: PinyinSchemaRegister = new PinyinSchemaRegister();
 
   public static text: TextRegister = new TextRegister();
 
   public static reinitialize = () => {
-    Registry.schema = new SchemaRegister();
+    Registry.schema = new PinyinSchemaRegister();
+    Registry.text = new TextRegister();
   };
 }

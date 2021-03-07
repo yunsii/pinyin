@@ -9,10 +9,14 @@
   },
   "dependencies": {
     "ahooks": "^2.9.6",
+    "classnames": "^2.2.6",
+    "lodash-es": "^4.17.21",
     "react": "^17.0.0",
     "react-dom": "^17.0.0"
   },
   "devDependencies": {
+    "@types/classnames": "^2.2.11",
+    "@types/lodash-es": "^4.17.4",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@umijs/fabric": "^2.5.6",

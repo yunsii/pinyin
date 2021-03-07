@@ -2,9 +2,11 @@ import * as React from 'react';
 import { useLocalStorageState } from 'ahooks';
 
 import { Registry, CharType, HanziCharConfig } from '@/core';
+import { Hanzi } from '@/components';
 import './schemes/XianHe';
 import './texts/HelloWorld';
 import './texts/Saying';
+import styles from './App.module.less';
 
 function App() {
   const schemaOptions = Registry.schema.getShemaOptions();
@@ -18,9 +20,12 @@ function App() {
   const textConfig = React.useMemo(() => {
     return Registry.text.getTextConfig(textKey!);
   }, [textKey]);
+
   const currentCharConfig = React.useMemo(() => {
-    return textConfig?.text.filter((item) => item.type === CharType.Hanzi)[index!] as HanziCharConfig;
+    const text = textConfig?.text.filter((item) => item.type === CharType.Hanzi);
+    return text?.[index! % text?.length] as HanziCharConfig;
   }, [textConfig, index]);
+
   const currentPinyin = React.useMemo(() => {
     if (currentCharConfig) {
       return Registry.schema.getPinyin(schemaType!, currentCharConfig.quanpin);
@@ -28,15 +33,15 @@ function App() {
   }, [currentCharConfig, schemaType]);
 
   React.useEffect(() => {
-    if (input && input === currentPinyin?.join('')) {
+    if (input && input === currentPinyin) {
       setIndex((prevIndex) => prevIndex! + 1);
       setInput('');
     }
   }, [currentPinyin, input]);
 
   return (
-    <div className='app'>
-      <div>
+    <div className={styles.app}>
+      <div className={styles.menu}>
         输入方式
         <select value={schemaType} onChange={(event) => setSchemaType(event.target.value)}>
           {schemaOptions.map((item) => {
@@ -71,13 +76,14 @@ function App() {
         >
           reset
         </button>
-        {currentCharConfig && (
-          <div>
-            <div>{currentCharConfig.char}</div>
-            <div>{currentPinyin}</div>
-            <input value={input} onChange={(event) => setInput(event.target.value)} />
-          </div>
-        )}
+      </div>
+      <div>
+        <Hanzi
+          char={currentCharConfig.char}
+          original={currentPinyin}
+          modified={input}
+          onChange={(value) => setInput(value)}
+        />
       </div>
     </div>
   );

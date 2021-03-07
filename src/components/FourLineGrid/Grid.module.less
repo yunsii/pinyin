@@ -1,0 +1,120 @@
+@gap-height: 12px;
+@line-width: 1px;
+@line-color: red;
+@vertical-offset: -4px;
+@vertical-offset-captialized: -5px;
+@cursor-width: 2px;
+@cursor-color: red;
+
+.hero {
+  width: 100%;
+  position: relative;
+  height: @gap-height * 3;
+
+  .pinyin {
+    user-select: none;
+  }
+}
+
+.pinyin {
+  position: absolute;
+  font-size: 24px;
+  line-height: @gap-height * 3;
+  top: @vertical-offset;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: pre;
+
+  > span {
+    position: relative;
+
+    &.error {
+      color: red;
+    }
+  }
+
+  > span + span {
+    padding-left: 1px;
+  }
+
+  &.captialized {
+    top: @vertical-offset-captialized;
+
+    > span:first-child {
+      text-transform: capitalize;
+    }
+  }
+}
+
+.line {
+  position: absolute;
+  width: 100%;
+
+  &-1,
+  &-4 {
+    border-top: @line-width solid @line-color;
+  }
+
+  &-2,
+  &-3 {
+    border-top: @line-width dashed @line-color;
+  }
+
+  &-1 {
+    top: 0;
+  }
+
+  &-2 {
+    top: @gap-height;
+  }
+
+  &-3 {
+    bottom: @gap-height;
+  }
+
+  &-4 {
+    bottom: 0;
+  }
+}
+
+.char {
+  color: #8c8c8c;
+
+  &-inputed {
+    color: #000;
+  }
+}
+
+.cursor() {
+  position: absolute;
+  height: calc(100% - 6px);
+  top: 2px;
+  content: '';
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
+}
+
+.cursor {
+  position: absolute;
+  width: 100%;
+
+  &::after {
+    .cursor();
+    border-right: @cursor-width solid @cursor-color;
+  }
+}
+
+.empty-content-cursor {
+  position: absolute;
+  width: 100%;
+
+  &::before {
+    .cursor();
+    border-left: @cursor-width solid @cursor-color;
+  }
+}

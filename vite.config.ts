@@ -1,3 +1,4 @@
+import * as path from 'path';
 import { defineConfig } from 'vite';
 import reactRefresh from '@vitejs/plugin-react-refresh';
 import tsconfigPaths from 'vite-tsconfig-paths';
@@ -9,5 +10,11 @@ export default defineConfig({
   server: {
     open: true,
     port: 8000,
+  },
+  alias: [{ find: '@', replacement: path.resolve(__dirname, 'src') }],
+  css: {
+    modules: {
+      localsConvention: 'camelCaseOnly',
+    },
   },
 });

@@ -23,7 +23,7 @@ export interface ShuangpinSchemaConfig extends BaseSchemaConfig {
   };
 }
 
-export default class SchemaRegister {
+export default class PinyinSchemaRegister {
   public quanPinSchema = quanPinSchema;
 
   public shuangPinSchemas: ShuangpinSchemaConfig[] = [];
@@ -41,14 +41,14 @@ export default class SchemaRegister {
 
   public getPinyin(schemaType: string, quanpin: string) {
     if (schemaType === quanpinType) {
-      return quanpin.split('');
+      return quanpin;
     }
     const schema = this.getShuangPinSchema(schemaType)!;
-    const shengmu = SchemaRegister.getShengmu(quanpin);
+    const shengmu = PinyinSchemaRegister.getShengmu(quanpin);
     if (shengmu) {
-      return [schema.map[shengmu as Shuangpin], schema.map[quanpin.replace(shengmu, '') as Shuangpin]];
+      return [schema.map[shengmu as Shuangpin], schema.map[quanpin.replace(shengmu, '') as Shuangpin]].join('');
     }
-    return schema.patchMap[quanpin as ZeroShengmu]!.split('');
+    return schema.patchMap[quanpin as ZeroShengmu];
   }
 
   public register(schema: ShuangpinSchemaConfig) {
