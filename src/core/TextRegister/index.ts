@@ -43,6 +43,7 @@ export default class TextRegister {
    *
    * - https://zhongwenzhuanpinyin.bmcx.com/
    *   - 已知问题 “内”标记为“na”
+   *   - 已知问题 “其”标记为“ji”
    */
   public load(options: LoadOptions) {
     const contentSegments = options.content.replace(/[ \n]/g, '').split('').filter(Boolean);

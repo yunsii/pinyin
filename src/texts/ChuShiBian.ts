@@ -20,7 +20,7 @@ Registry.text.load({
   　　愿陛下托臣以讨贼兴复之效，不效，则治臣之罪，以告先帝之灵。若无兴德之言，则责攸之、祎、允等之慢，以彰其咎；陛下亦宜自谋，以咨诹善道，察纳雅言，深追先帝遗诏。臣不胜受恩感激。今当远离，临表涕零，不知所言。`,
   pinyin: `xian di chuang ye wei ban er zhong dao beng cu ， jin tian xia san fen ， yi zhou pi bi ， ci cheng wei ji cun wang zhi qiu ye 。 ran shi wei zhi chen bu xie yu nei ， zhong zhi zhi shi wang shen yu wai zhe ， gai zhui xian di zhi shu yu ， yu bao zhi yu bi xia ye 。 cheng yi kai zhanɡ sheng ting ， yi guang xian di yi de ， hui hong zhi shi zhi qi ， bu yi wang zi fei bo ， yin yu shi yi ， yi sai zhong jian zhi lu ye 。 
 
-  　 　 gong zhong fu zhong ， ju wei yi ti ； zhi fa zang pi ， bu yi yi tong 。 re you zuo jian fan ke ji wei zhong shan zhe ， yi fu you si lun ji xinɡ shanɡ ， yi zhao bi xia ping ming zhi li ， bu yi pian si ， shi nei wai yi fa ye 。 
+  　 　 gong zhong fu zhong ， ju wei yi ti ； zhi fa zang pi ， bu yi yi tong 。 re you zuo jian fan ke ji wei zhong shan zhe ， yi fu you si lun qi xinɡ shanɡ ， yi zhao bi xia ping ming zhi li ， bu yi pian si ， shi nei wai yi fa ye 。 
   
   　 　 shi zhong 、 shi lang guo you zhi 、 fei yi 、 dong yun deng ， ci jie liang shi ， zhi lv zhong chun ， shi yi xian di jian ba yi wei bi xia 。 yu yi wei gong zhong zhi shi ， shi wu da xiao ， xi yi zi zhi ， ran hou shi xing ， bi neng bi bu que lou ， you suo guang yi 。 
   
