@@ -3,9 +3,8 @@ import { useLocalStorageState } from 'ahooks';
 
 import { Registry, CharType, HanziCharConfig } from '@/core';
 import { Hanzi } from '@/components';
-import './schemes/XianHe';
-import './texts/HelloWorld';
-import './texts/Saying';
+import './schemes';
+import './texts';
 import styles from './App.module.less';
 
 function App() {
