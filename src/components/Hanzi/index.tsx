@@ -1,10 +1,11 @@
 import * as React from 'react';
+import { Typography } from 'antd';
 
 import { FourLineGrid } from '@/components';
-import type { FourLineGridProps } from '@/components/FourLineGrid';
+import type { FourLinesGridProps } from '@/components/FourLinesGrid';
 import styles from './index.module.less';
 
-export interface HanziProps extends Omit<FourLineGridProps, 'disabled'> {
+export interface HanziProps extends Omit<FourLinesGridProps, 'disabled'> {
   char?: string;
 }
 
@@ -13,7 +14,7 @@ export default function Hanzi(props: HanziProps) {
 
   return (
     <div className={styles.container}>
-      <div className={styles.char}>{char}</div>
+      <Typography className={styles.char}>{char}</Typography>
       <FourLineGrid {...rest} />
     </div>
   );

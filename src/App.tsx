@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { useLocalStorageState } from 'ahooks';
+import { Select, Button, Input } from 'antd';
+import { RedoOutlined } from '@ant-design/icons';
 
 import { Registry, CharType, HanziCharConfig } from '@/core';
 import { Hanzi } from '@/components';
@@ -40,42 +42,6 @@ function App() {
 
   return (
     <div className={styles.app}>
-      <div className={styles.menu}>
-        输入方式
-        <select value={schemaType} onChange={(event) => setSchemaType(event.target.value)}>
-          {schemaOptions.map((item) => {
-            return (
-              <option key={item.type} value={item.type}>
-                {item.displayName}
-              </option>
-            );
-          })}
-        </select>
-        输入模板
-        <select
-          value={textKey}
-          onChange={(event) => {
-            setIndex(0);
-            setTextKey(event.target.value);
-          }}
-        >
-          {textOptions.map((item) => {
-            return (
-              <option key={item.key} value={item.key}>
-                {item.title}
-              </option>
-            );
-          })}
-        </select>
-        <button
-          onClick={() => {
-            setIndex(0);
-            setInput('');
-          }}
-        >
-          reset
-        </button>
-      </div>
       <div>
         <Hanzi
           char={currentCharConfig.char}
@@ -83,6 +49,44 @@ function App() {
           modified={input}
           onChange={(value) => setInput(value)}
         />
+      </div>
+      <div className={styles.menu}>
+        <Input.Group compact>
+          <Select
+            style={{
+              width: 100,
+            }}
+            options={schemaOptions.map((item) => ({
+              value: item.type,
+              label: item.displayName,
+            }))}
+            placeholder='拼写方案'
+            value={schemaType}
+            onChange={(value) => setSchemaType(value)}
+          />
+          <Select
+            style={{
+              width: 130,
+            }}
+            options={textOptions.map((item) => ({
+              value: item.key,
+              label: item.title,
+            }))}
+            placeholder='拼写模板'
+            value={textKey}
+            onChange={(value) => {
+              setIndex(0);
+              setTextKey(value);
+            }}
+          />
+          <Button
+            onClick={() => {
+              setIndex(0);
+              setInput('');
+            }}
+            icon={<RedoOutlined />}
+          />
+        </Input.Group>
       </div>
     </div>
   );
