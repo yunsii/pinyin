@@ -4,12 +4,12 @@ import { useBoolean, useControllableValue } from 'ahooks';
 import Grid, { GridProps } from './Grid';
 import styles from './index.module.less';
 
-export interface FourLineGridProps extends GridProps {
+export interface FourLinesGridProps extends GridProps {
   value?: string;
   onChange?: (value: string) => void;
 }
 
-export default function FourLineGrid(props: FourLineGridProps) {
+export default function FourLinesGrid(props: FourLinesGridProps) {
   const { original, capitalized = true } = props;
 
   const [value, setValue] = useControllableValue<string>(props, {
