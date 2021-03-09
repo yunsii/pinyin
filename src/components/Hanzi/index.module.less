@@ -1,6 +1,6 @@
 @import (reference) 'antd/lib/style/themes/default';
 
-@container-padding: 16px;
+@container-padding: 24px;
 @char-box-size: 200px;
 
 .container {
@@ -10,7 +10,7 @@
   box-shadow: -12px 12px 8px #dcdcdc, 12px -12px 8px #ffffff;
 
   padding: @container-padding;
-  width: @char-box-size;
+  width: @char-box-size + @container-padding * 2;
   display: flex;
   justify-content: center;
   align-items: center;
