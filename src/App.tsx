@@ -12,6 +12,7 @@ import {
 import { Registry, CharType, HanziCharConfig } from '@/core';
 import { Hanzi } from '@/components';
 import { useBin, useUpdateBin } from '@/hooks';
+import { Data } from '@/hooks/bin';
 import './schemes';
 import './texts';
 import styles from './App.module.less';
@@ -23,8 +24,8 @@ function App() {
   const textOptions = Registry.text.getTextOptions();
 
   const [formRef] = Form.useForm();
-  const [name, setName] = useLocalStorageState<string>('name');
   const [binId, setBinId] = useLocalStorageState<string>('bin-id');
+  const [name, setName] = useLocalStorageState<string>('name');
   const [schemaType, setSchemaType] = useLocalStorageState('schema-type', schemaOptions?.[0]?.type);
   const [textKey, setTextKey] = useLocalStorageState('text-key', textOptions?.[0]?.key);
   const [textIndex, setTextIndex] = useLocalStorageState('current-index', 0);
@@ -34,15 +35,16 @@ function App() {
   const { run: runDetail, loading: detailLoading } = useBin();
   const { run: runUpdate, loading: udpateLoading } = useUpdateBin();
 
-  const sync = async (theBinId: string) => {
-    if (theBinId) {
-      const result = await runDetail(theBinId);
-      setSchemaType(result['progress']['schema-type']);
-      setTextKey(result['progress']['text-key']);
-      setTextIndex(result['progress']['input-text-index']);
-      setInput(result['progress']['input-pinyin']);
-      return result;
-    }
+  const setState = (data: Data) => {
+    setName(data['name']);
+    setSchemaType(data['progress']['schema-type']);
+    setTextKey(data['progress']['text-key']);
+    setTextIndex(data['progress']['input-text-index']);
+    setInput(data['progress']['input-pinyin']);
+  };
+
+  const download = async (theBinId: string) => {
+    return await runDetail(theBinId);
   };
 
   const upload = (theBinId: string, name: string) => {
@@ -81,12 +83,12 @@ function App() {
 
   React.useEffect(() => {
     if (binId) {
-      sync(binId);
+      download(binId).then(setState);
     }
   }, []);
 
   const handleSignIn = async () => {
-    const data = await sync(formRef.getFieldValue('binId'));
+    const data = await download(formRef.getFieldValue('binId'));
     if (data?.name) {
       setBinId(formRef.getFieldValue('binId'));
       setVisible(false);
@@ -113,7 +115,7 @@ function App() {
 
   const handleDownload = () => {
     if (binId) {
-      sync(binId);
+      download(binId).then(setState);
       return;
     }
     setVisible(true);
@@ -182,6 +184,7 @@ function App() {
         visible={visible}
         cancelText='取消'
         okText='确定'
+        onCancel={() => setVisible(false)}
         onOk={handleSignIn}
         destroyOnClose
       >
