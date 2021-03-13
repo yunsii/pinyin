@@ -3,13 +3,13 @@ import { message } from 'antd';
 
 const BASE_URL = 'https://api.jsonbin.io/v3';
 
-export interface Data {
-  name: string;
+export interface BinRecord {
+  name?: string;
   progress: {
-    'input-pinyin': string;
-    'input-text-index': number;
-    'schema-type': string;
-    'text-key': string;
+    inputPinyin: string;
+    inputTextIndex: number;
+    schemaType: string;
+    textKey: string;
   };
 }
 
@@ -20,11 +20,11 @@ export interface Result {
     id: string;
     private: boolean;
   };
-  record: Data;
+  record: BinRecord;
 }
 
 export function useBin() {
-  return useRequest<Result, [string], Data, Data>((theBinId) => `${BASE_URL}/b/${theBinId}/latest`, {
+  return useRequest<Result, [string], BinRecord, BinRecord>((theBinId) => `${BASE_URL}/b/${theBinId}/latest`, {
     manual: true,
     onSuccess(data) {
       if (data?.name) {
@@ -43,7 +43,7 @@ export function useBin() {
 }
 
 export function useUpdateBin() {
-  return useRequest<Result, [string, Data]>(
+  return useRequest<Result, [string, BinRecord]>(
     (id, bin) => ({
       url: `${BASE_URL}/b/${id}`,
       method: 'PUT',

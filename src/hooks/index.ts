@@ -1,1 +1,1 @@
-export { useBin, useUpdateBin } from './bin';
+export * as BinHooks from './bin';
