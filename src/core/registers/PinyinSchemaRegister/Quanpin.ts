@@ -1,4 +1,4 @@
-import { Quanpin } from '../Pinyin';
+import { Quanpin } from '../../Pinyin';
 import { QuanpinSchemaConfig } from '.';
 
 export const type = 'QuanPin';

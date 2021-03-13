@@ -1,4 +1,4 @@
-export { default as Registry } from './Registry';
 export { Shuangpin, ZeroShengmu } from './Pinyin';
-export { CharType } from './TextRegister';
-export type { TextConfig, MarkCharConfig, HanziCharConfig } from './TextRegister';
+export { default as Registry } from './registers/Registry';
+export { CharType } from './registers/TextRegister';
+export type { TextConfig, MarkCharConfig, HanziCharConfig } from './registers/TextRegister';

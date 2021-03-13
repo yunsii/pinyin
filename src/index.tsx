@@ -1,12 +1,12 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 
-import App from './App';
+import Hero from '@/pages/Hero';
 import './index.less';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Hero />
   </React.StrictMode>,
-  document.getElementById('root'),
+  document.getElementById('root')
 );

@@ -13,13 +13,12 @@ import { Registry, CharType, HanziCharConfig } from '@/core';
 import { Hanzi } from '@/components';
 import { useBin, useUpdateBin } from '@/hooks';
 import { Data } from '@/hooks/bin';
-import './schemes';
-import './texts';
-import styles from './App.module.less';
+import './data';
+import styles from './index.module.less';
 
 const mouseEnterDelay = 0.5;
 
-function App() {
+export default function Hero() {
   const schemaOptions = Registry.schema.getShemaOptions();
   const textOptions = Registry.text.getTextOptions();
 
@@ -213,5 +212,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

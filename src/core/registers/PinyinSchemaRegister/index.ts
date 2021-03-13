@@ -1,4 +1,4 @@
-import { Quanpin, Shuangpin, ZeroShengmu, ShengmuList } from '../Pinyin';
+import { Quanpin, Shuangpin, ZeroShengmu, ShengmuList } from '../../Pinyin';
 import quanPinSchema, { type as quanpinType } from './Quanpin';
 
 export interface BaseSchemaConfig {
