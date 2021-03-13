@@ -23,18 +23,18 @@ export default function useProfileBin(defaultProgress: BinRecord['progress']) {
 
   const onChangeBin = (name: keyof typeof processedBin, value: any) => {
     if (name === 'name') {
-      setBin({
-        ...bin!,
+      setBin((prevBin) => ({
+        ...prevBin!,
         [name]: value,
-      });
+      }));
     } else {
-      setBin({
-        ...bin!,
+      setBin((prevBin) => ({
+        ...prevBin!,
         progress: {
-          ...bin?.progress!,
+          ...prevBin?.progress!,
           [name]: value,
         },
-      });
+      }));
     }
   };
 
