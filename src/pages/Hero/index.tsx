@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Select, Button, Input, Tooltip, Modal, Form, Typography, Drawer, List } from 'antd';
 import {
   RedoOutlined,
