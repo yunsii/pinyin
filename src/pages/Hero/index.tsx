@@ -79,7 +79,6 @@ export default function Hero() {
       <div className={styles.menu}>
         <Input.Group compact>
           <Button icon={<SettingOutlined />} onClick={() => toggleSettingsVisible()} />
-          {/* <Button icon={<GithubOutlined />} href='https://github.com/theprimone/pinyin' target='_blank' /> */}
           <Select
             style={{
               width: 100,
@@ -186,7 +185,7 @@ export default function Hero() {
         visible={settingsVisible}
         onClose={() => toggleSettingsVisible()}
       >
-        <List bordered className={styles.settingsList}>
+        <List size='small' bordered className={styles.settingsList}>
           <List.Item onClick={onClearCache}>清除缓存</List.Item>
         </List>
         <Button
