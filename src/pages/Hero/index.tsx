@@ -11,7 +11,6 @@ import {
 
 import { Registry, CharType, HanziCharConfig } from '@/core';
 import { Hanzi } from '@/components';
-import './data';
 import useProfileBin from './useProfileBin';
 import styles from './index.module.less';
 import { useBoolean } from 'ahooks';

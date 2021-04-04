@@ -3,6 +3,7 @@ import { defineConfig } from 'vite';
 import reactRefresh from '@vitejs/plugin-react-refresh';
 import vitePluginImp from 'vite-plugin-imp';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import vitApp from '@vitjs/vit';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -17,6 +18,15 @@ export default defineConfig({
           style: (name) => `antd/es/${name}/style`,
         },
       ],
+    }),
+    vitApp({
+      routes: [
+        {
+          path: '/',
+          component: './pages/Hero',
+        },
+      ],
+      exportStatic: {},
     }),
   ],
   server: {
