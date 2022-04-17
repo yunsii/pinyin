@@ -18,25 +18,17 @@ import { useBoolean } from 'ahooks';
 const mouseEnterDelay = 0.5;
 
 export default function Hero() {
-  const schemaOptions = Registry.schema.getShemaOptions();
+  const schemaOptions = Registry.schema.getSchemaOptions();
   const textOptions = Registry.text.getTextOptions();
 
   const [formRef] = Form.useForm();
-  const {
-    bin,
-    onChangeBin,
-    detailLoading,
-    udpateLoading,
-    onSignIn,
-    onUpload,
-    onDownload,
-    onClearCache,
-  } = useProfileBin({
-    schemaType: schemaOptions?.[0]?.type,
-    textKey: textOptions?.[0]?.key,
-    inputTextIndex: 0,
-    inputPinyin: '',
-  });
+  const { bin, onChangeBin, detailLoading, updateLoading, onSignIn, onUpload, onDownload, onClearCache } =
+    useProfileBin({
+      schemaType: schemaOptions?.[0]?.type,
+      textKey: textOptions?.[0]?.key,
+      inputTextIndex: 0,
+      inputPinyin: '',
+    });
   const [visible, setVisible] = React.useState(false);
   const [settingsVisible, { toggle: toggleSettingsVisible }] = useBoolean(false);
 
@@ -69,7 +61,7 @@ export default function Hero() {
     <div className={styles.app}>
       <div>
         <Hanzi
-          char={currentCharConfig.char}
+          zi={currentCharConfig.char}
           original={currentPinyin}
           modified={bin.inputPinyin}
           onChange={(value) => onChangeBin('inputPinyin', value)}
@@ -116,7 +108,7 @@ export default function Hero() {
           </Tooltip>
           <Tooltip overlay='同步本地状态到云端' mouseEnterDelay={mouseEnterDelay}>
             <Button
-              icon={udpateLoading ? <LoadingOutlined /> : <CloudUploadOutlined />}
+              icon={updateLoading ? <LoadingOutlined /> : <CloudUploadOutlined />}
               onClick={() => {
                 onUpload(() => setVisible(true));
               }}

@@ -67,7 +67,7 @@ export default class PinyinSchemaRegister {
     return this.shuangPinSchemas.find(({ type }) => type === schemaType);
   }
 
-  public getShemaOptions() {
+  public getSchemaOptions() {
     return [
       { type: this.quanPinSchema.type, displayName: this.quanPinSchema.displayName },
       ...this.shuangPinSchemas.map((item) => {

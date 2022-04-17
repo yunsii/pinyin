@@ -47,9 +47,9 @@ export default class TextRegister {
    */
   public load(options: LoadOptions) {
     const contentSegments = options.content.replace(/[ \n]/g, '').split('').filter(Boolean);
-    const pinyinSegements = options.pinyin.replace(/[\n]/g, ' ').split(/ /g).filter(Boolean);
+    const pinyinSegments = options.pinyin.replace(/[\n]/g, ' ').split(/ /g).filter(Boolean);
     const text: TextConfig['text'] = [];
-    pinyinSegements.forEach((item, index) => {
+    pinyinSegments.forEach((item, index) => {
       if (/^[a-z]+$/.test(item.toLowerCase())) {
         text.push({
           type: CharType.Hanzi,

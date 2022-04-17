@@ -39,7 +39,7 @@ export default function useProfileBin(defaultProgress: BinRecord['progress']) {
   };
 
   const { run: runDetail, loading: detailLoading } = BinHooks.useBin();
-  const { run: runUpdate, loading: udpateLoading } = BinHooks.useUpdateBin();
+  const { run: runUpdate, loading: updateLoading } = BinHooks.useUpdateBin();
 
   const download = async (theBinId: string) => {
     return await runDetail(theBinId);
@@ -117,7 +117,7 @@ export default function useProfileBin(defaultProgress: BinRecord['progress']) {
     bin: processedBin,
     onChangeBin,
     detailLoading,
-    udpateLoading,
+    updateLoading,
     onSignIn,
     onUpload,
     onDownload,
