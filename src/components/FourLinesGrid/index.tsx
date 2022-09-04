@@ -1,27 +1,29 @@
-import React from 'react';
-import { useBoolean, useControllableValue } from 'ahooks';
+import React from 'react'
+import { useBoolean, useControllableValue } from 'ahooks'
 
-import Grid, { GridProps } from './Grid';
-import styles from './index.module.less';
+import Grid from './Grid'
+import styles from './index.module.less'
+
+import type { GridProps } from './Grid'
 
 export interface FourLinesGridProps extends GridProps {
-  value?: string;
-  onChange?: (value: string) => void;
+  value?: string
+  onChange?: (value: string) => void
 }
 
 export default function FourLinesGrid(props: FourLinesGridProps) {
-  const { original, capitalized = true } = props;
+  const { original, capitalized = true } = props
 
   const [value, setValue] = useControllableValue<string>(props, {
     valuePropName: 'modified',
-  });
-  const [focued, { toggle }] = useBoolean(false);
+  })
+  const [focued, { toggle }] = useBoolean(false)
 
   const handleChange = (nextValue = '') => {
     if (original && original.length >= nextValue.length) {
-      setValue(nextValue.toLowerCase());
+      setValue(nextValue.toLowerCase())
     }
-  };
+  }
 
   return (
     <div className={styles.container}>
@@ -43,5 +45,5 @@ export default function FourLinesGrid(props: FourLinesGridProps) {
         />
       </div>
     </div>
-  );
+  )
 }

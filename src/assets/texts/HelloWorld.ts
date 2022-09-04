@@ -1,4 +1,4 @@
-import { Registry, CharType } from '@/core';
+import { CharType, Registry } from '@/core'
 
 Registry.text.register({
   key: 'HelloWorld',
@@ -33,4 +33,4 @@ Registry.text.register({
       char: '！',
     },
   ],
-});
+})

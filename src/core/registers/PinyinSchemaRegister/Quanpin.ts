@@ -1,10 +1,11 @@
-import { Quanpin } from '../../Pinyin';
-import { QuanpinSchemaConfig } from '.';
+import { Quanpin } from '../../Pinyin'
 
-export const type = 'QuanPin';
+import type { QuanpinSchemaConfig } from '.'
+
+export const type = 'QuanPin'
 
 export default {
   type,
   displayName: '全拼',
   map: Quanpin,
-} as QuanpinSchemaConfig;
+} as QuanpinSchemaConfig

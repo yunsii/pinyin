@@ -1,0 +1,13 @@
+# "prettier options": "https://prettier.io/docs/en/options.html"
+
+singleQuote: true
+trailingComma: all
+proseWrap: never
+endOfLine: lf
+quoteProps: consistent
+jsxSingleQuote: true
+semi: false
+useTabs: false
+# Turn off plugin autoloading
+# ref: https://prettier.io/docs/en/plugins.html#:~:text=To%20turn%20off%20plugin%20autoloading,false%20%7D%20to%20options%20in%20prettier.
+pluginSearchDirs: false

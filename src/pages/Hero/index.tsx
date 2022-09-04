@@ -1,75 +1,107 @@
-import React from 'react';
-import { Select, Button, Input, Tooltip, Modal, Form, Typography, Drawer, List } from 'antd';
+import React from 'react'
 import {
-  RedoOutlined,
-  CloudUploadOutlined,
+  Button,
+  Drawer,
+  Form,
+  Input,
+  List,
+  Modal,
+  Select,
+  Tooltip,
+  Typography,
+} from 'antd'
+import {
   CloudDownloadOutlined,
+  CloudUploadOutlined,
   GithubOutlined,
   LoadingOutlined,
+  RedoOutlined,
   SettingOutlined,
-} from '@ant-design/icons';
+} from '@ant-design/icons'
+import { useBoolean } from 'ahooks'
 
-import { Registry, CharType, HanziCharConfig } from '@/core';
-import { Hanzi } from '@/components';
-import useProfileBin from './useProfileBin';
-import styles from './index.module.less';
-import { useBoolean } from 'ahooks';
+import useProfileBin from './useProfileBin'
+import styles from './index.module.less'
 
-const mouseEnterDelay = 0.5;
+import type { HanziCharConfig } from '@/core'
+
+import { CharType, Registry } from '@/core'
+import { Hanzi } from '@/components'
+
+const mouseEnterDelay = 0.5
 
 export default function Hero() {
-  const schemaOptions = Registry.schema.getSchemaOptions();
-  const textOptions = Registry.text.getTextOptions();
+  const schemaOptions = Registry.schema.getSchemaOptions()
+  const textOptions = Registry.text.getTextOptions()
 
-  const [formRef] = Form.useForm();
-  const { bin, onChangeBin, detailLoading, updateLoading, onSignIn, onUpload, onDownload, onClearCache } =
-    useProfileBin({
-      schemaType: schemaOptions?.[0]?.type,
-      textKey: textOptions?.[0]?.key,
-      inputTextIndex: 0,
-      inputPinyin: '',
-    });
-  const [visible, setVisible] = React.useState(false);
-  const [settingsVisible, { toggle: toggleSettingsVisible }] = useBoolean(false);
+  const [formRef] = Form.useForm()
+  const {
+    bin,
+    onChangeBin,
+    detailLoading,
+    updateLoading,
+    onSignIn,
+    onUpload,
+    onDownload,
+    onClearCache,
+  } = useProfileBin({
+    schemaType: schemaOptions[0]?.type,
+    textKey: textOptions[0]?.key,
+    inputTextIndex: 0,
+    inputPinyin: '',
+  })
+  const [visible, setVisible] = React.useState(false)
+  const [settingsVisible, { toggle: toggleSettingsVisible }] = useBoolean(false)
 
   const textConfig = React.useMemo(() => {
-    return Registry.text.getTextConfig(bin.textKey);
-  }, [bin.textKey]);
+    return Registry.text.getTextConfig(bin?.textKey || textOptions[0]?.key)
+  }, [bin.textKey])
 
   const currentCharConfig = React.useMemo(() => {
-    const text = textConfig?.text.filter((item) => item.type === CharType.Hanzi)!;
-    const index = bin.inputTextIndex! % text?.length;
-    return text?.[index] as HanziCharConfig;
-  }, [textConfig, bin.inputTextIndex]);
+    if (!textConfig) {
+      return null
+    }
+    const text = textConfig.text.filter((item) => item.type === CharType.Hanzi)
+    const index = bin.inputTextIndex! % text.length
+    return text?.[index] as HanziCharConfig
+  }, [textConfig, bin.inputTextIndex])
 
   const currentPinyin = React.useMemo(() => {
     if (currentCharConfig) {
-      return Registry.schema.getPinyin(bin.schemaType!, currentCharConfig.quanpin);
+      return Registry.schema.getPinyin(
+        bin.schemaType!,
+        currentCharConfig.quanpin,
+      )
     }
-  }, [currentCharConfig, bin.schemaType]);
+  }, [currentCharConfig, bin.schemaType])
 
   React.useEffect(() => {
     if (bin.inputPinyin && bin.inputPinyin === currentPinyin) {
       // onChangeBin 需要函数式更新状态，否则后者 inputPinyin 的变化会重置
       // inputTextIndex 的变化，导致无法切换到下一个字符。
-      onChangeBin('inputTextIndex', bin.inputTextIndex + 1);
-      onChangeBin('inputPinyin', '');
+      onChangeBin({
+        inputTextIndex: (bin?.inputTextIndex || 0) + 1,
+        inputPinyin: '',
+      })
     }
-  }, [currentPinyin, bin.inputPinyin, bin.inputTextIndex]);
+  }, [currentPinyin, bin.inputPinyin, bin.inputTextIndex])
 
   return (
     <div className={styles.app}>
       <div>
         <Hanzi
-          zi={currentCharConfig.char}
+          zi={currentCharConfig?.char}
           original={currentPinyin}
           modified={bin.inputPinyin}
-          onChange={(value) => onChangeBin('inputPinyin', value)}
+          onChange={(value) => onChangeBin({ inputPinyin: value })}
         />
       </div>
       <div className={styles.menu}>
         <Input.Group compact>
-          <Button icon={<SettingOutlined />} onClick={() => toggleSettingsVisible()} />
+          <Button
+            icon={<SettingOutlined />}
+            onClick={() => toggleSettingsVisible()}
+          />
           <Select
             style={{
               width: 100,
@@ -80,7 +112,7 @@ export default function Hero() {
             }))}
             placeholder='拼写方案'
             value={bin.schemaType}
-            onChange={(value) => onChangeBin('schemaType', value)}
+            onChange={(value) => onChangeBin({ schemaType: value })}
           />
           <Select
             style={{
@@ -93,34 +125,42 @@ export default function Hero() {
             placeholder='拼写模板'
             value={bin.textKey}
             onChange={(value) => {
-              onChangeBin('inputTextIndex', 0);
-              onChangeBin('textKey', value);
+              onChangeBin({ inputTextIndex: 0, textKey: value })
             }}
           />
           <Tooltip overlay='重置本地输入状态' mouseEnterDelay={mouseEnterDelay}>
             <Button
               onClick={() => {
-                onChangeBin('inputTextIndex', 0);
-                onChangeBin('inputPinyin', '');
+                onChangeBin({ inputTextIndex: 0, inputPinyin: '' })
               }}
               icon={<RedoOutlined />}
             />
           </Tooltip>
-          <Tooltip overlay='同步本地状态到云端' mouseEnterDelay={mouseEnterDelay}>
+          <Tooltip
+            overlay='同步本地状态到云端'
+            mouseEnterDelay={mouseEnterDelay}
+          >
             <Button
-              icon={updateLoading ? <LoadingOutlined /> : <CloudUploadOutlined />}
+              icon={
+                updateLoading ? <LoadingOutlined /> : <CloudUploadOutlined />
+              }
               onClick={() => {
-                onUpload(() => setVisible(true));
+                onUpload(() => setVisible(true))
               }}
             />
           </Tooltip>
-          <Tooltip overlay='同步云端状态到本地' mouseEnterDelay={mouseEnterDelay}>
+          <Tooltip
+            overlay='同步云端状态到本地'
+            mouseEnterDelay={mouseEnterDelay}
+          >
             <Button
-              icon={detailLoading ? <LoadingOutlined /> : <CloudDownloadOutlined />}
+              icon={
+                detailLoading ? <LoadingOutlined /> : <CloudDownloadOutlined />
+              }
               onClick={() => {
                 onDownload(() => {
-                  setVisible(true);
-                });
+                  setVisible(true)
+                })
               }}
             />
           </Tooltip>
@@ -134,10 +174,10 @@ export default function Hero() {
         okText='确定'
         onCancel={() => setVisible(false)}
         onOk={() => {
-          const values = formRef.getFieldsValue();
+          const values = formRef.getFieldsValue()
           onSignIn(values.binId, values.name, {
             onOk: () => setVisible(false),
-          });
+          })
         }}
         destroyOnClose
       >
@@ -149,7 +189,9 @@ export default function Hero() {
             name='name'
             label='用户名'
             extra={
-              <Typography.Text type='secondary'>默认使用云端用户名，如果没有用户名会根据当前值创建。</Typography.Text>
+              <Typography.Text type='secondary'>
+                默认使用云端用户名，如果没有用户名会根据当前值创建。
+              </Typography.Text>
             }
           >
             <Input />
@@ -157,14 +199,15 @@ export default function Hero() {
         </Form>
         <Typography.Paragraph type='secondary'>
           同步功能基于&nbsp;
-          <a href='https://jsonbin.io/' target='_blank'>
+          <a href='https://jsonbin.io/' target='_blank' rel='noreferrer'>
             JSONbin
           </a>
-          &nbsp; 实现，可自行注册并创建一个公开 BIN 后将 BIN_ID 贴于此处确认即可。
+          &nbsp; 实现，可自行注册并创建一个公开 BIN 后将 BIN_ID
+          贴于此处确认即可。
         </Typography.Paragraph>
         <Typography.Text type='secondary'>
           当然，如果不想注册的话，可邮箱
-          <a href='mailto:yuns.xie@qq.com' target='_blank'>
+          <a href='mailto:yuns.xie@qq.com' target='_blank' rel='noreferrer'>
             联系我
           </a>
           为你创建 BIN_ID。
@@ -190,5 +233,5 @@ export default function Hero() {
         </Button>
       </Drawer>
     </div>
-  );
+  )
 }
