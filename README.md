@@ -2,6 +2,8 @@
 
 在线拼音打字练习
 
+Agents working on this repo: read `AGENTS.md`.
+
 ## 拼音方案
 
 - [x] 全拼输入
