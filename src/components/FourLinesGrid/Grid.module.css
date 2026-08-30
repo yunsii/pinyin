@@ -1,0 +1,109 @@
+.hero {
+  width: 100%;
+  position: relative;
+  height: 36px;
+}
+
+.pinyin {
+  position: absolute;
+  font-size: 24px;
+  line-height: 36px;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: pre;
+  user-select: none;
+}
+
+.pinyin > span {
+  position: relative;
+}
+
+.pinyin > span + span {
+  padding-left: 1px;
+}
+
+.captialized {
+  top: -5px;
+}
+
+.captialized > span:first-child {
+  text-transform: capitalize;
+}
+
+.line {
+  position: absolute;
+  width: 100%;
+}
+
+.line1,
+.line4 {
+  border-top: 1px solid red;
+}
+
+.line2,
+.line3 {
+  border-top: 1px dashed red;
+}
+
+.line1 {
+  top: 0;
+}
+
+.line2 {
+  top: 12px;
+}
+
+.line3 {
+  bottom: 12px;
+}
+
+.line4 {
+  bottom: 0;
+}
+
+.char {
+  color: #8c8c8c;
+}
+
+.charInputed {
+  color: #000;
+}
+
+.error {
+  color: red;
+}
+
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
+}
+
+.cursor {
+  position: absolute;
+  width: 100%;
+}
+
+.cursor::after {
+  position: absolute;
+  height: calc(100% - 6px);
+  top: 2px;
+  content: '';
+  animation: blink 1s infinite;
+  border-right: 2px solid red;
+}
+
+.emptyContentCursor {
+  position: absolute;
+  width: 100%;
+}
+
+.emptyContentCursor::before {
+  position: absolute;
+  height: calc(100% - 6px);
+  top: 2px;
+  content: '';
+  animation: blink 1s infinite;
+  border-left: 2px solid red;
+}

@@ -1,7 +1,4 @@
-import React from 'react'
-import { Typography } from 'antd'
-
-import styles from './index.module.less'
+import styles from './index.module.css'
 
 import type { FourLinesGridProps } from '@/components/FourLinesGrid'
 
@@ -16,7 +13,7 @@ export default function Hanzi(props: HanziProps) {
 
   return (
     <div className={styles.container}>
-      <Typography className={styles.zi}>{zi}</Typography>
+      <div className={styles.zi}>{zi}</div>
       <FourLineGrid {...rest} />
     </div>
   )

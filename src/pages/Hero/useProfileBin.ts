@@ -1,7 +1,6 @@
 import React from 'react'
-import { message } from 'antd'
 import { useLocalStorageState } from 'ahooks'
-import { get } from 'lodash-es'
+import { toast } from 'sonner'
 
 import type { BinRecord } from '@/hooks/bin'
 
@@ -23,19 +22,19 @@ export default function useProfileBin(defaultProgress: BinRecord['progress']) {
       inputTextIndex: (bin?.progress || defaultProgress)?.inputTextIndex,
       inputPinyin: (bin?.progress || defaultProgress)?.inputPinyin,
     }
-  }, [bin])
+  }, [bin, defaultProgress])
 
   const onChangeBin = (nextBin: Partial<typeof processedBin>) => {
     const { name: nextName, ...nextProgress } = nextBin
     setBin((prevBin) => {
-      const prevProgress = get(prevBin, 'progress', defaultProgress)
+      const prevProgress = prevBin?.progress || defaultProgress!
       return {
         name: nextName || prevBin?.name,
         progress: {
           ...prevProgress,
           ...nextProgress,
         },
-      }
+      } satisfies BinRecord
     })
   }
 
@@ -58,8 +57,9 @@ export default function useProfileBin(defaultProgress: BinRecord['progress']) {
       download(binId).then((result) => setBin(result.record))
     }
     if (bin && bin.name) {
-      message.success(`你好，${bin.name} 😃`)
+      toast.success(`你好，${bin.name} 😃`)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only greeting / hydrate
   }, [])
 
   const onSignIn = async (
@@ -85,8 +85,8 @@ export default function useProfileBin(defaultProgress: BinRecord['progress']) {
         progress: bin?.progress,
       })
       options?.onOk?.()
-    } catch (error) {
-      message.warn('初始化数据失败，请稍后重试 😢')
+    } catch {
+      toast.warning('初始化数据失败，请稍后重试 😢')
     }
   }
 
@@ -109,7 +109,7 @@ export default function useProfileBin(defaultProgress: BinRecord['progress']) {
   const onClearCache = () => {
     setBin()
     setBinId()
-    message.success('已清空缓存')
+    toast.success('已清空缓存')
   }
 
   return {

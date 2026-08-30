@@ -1,8 +1,13 @@
 # pinyin
 
-在线拼音打字练习
+在线拼音打字练习（Vite + React 19 + Tailwind v4 + shadcn/ui · Base UI）。
 
 Agents working on this repo: read `AGENTS.md`.
+
+```bash
+pnpm install
+pnpm dev
+```
 
 ## 拼音方案
 

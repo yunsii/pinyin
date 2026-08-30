@@ -2,7 +2,7 @@ import React from 'react'
 import { useBoolean, useControllableValue } from 'ahooks'
 
 import Grid from './Grid'
-import styles from './index.module.less'
+import styles from './index.module.css'
 
 import type { GridProps } from './Grid'
 
@@ -17,7 +17,7 @@ export default function FourLinesGrid(props: FourLinesGridProps) {
   const [value, setValue] = useControllableValue<string>(props, {
     valuePropName: 'modified',
   })
-  const [focued, { toggle }] = useBoolean(false)
+  const [focused, { toggle }] = useBoolean(false)
 
   const handleChange = (nextValue = '') => {
     if (original && original.length >= nextValue.length) {
@@ -30,6 +30,10 @@ export default function FourLinesGrid(props: FourLinesGridProps) {
       <div className={styles.hero}>
         <div className={styles.inputContainer}>
           <input
+            id='pinyin-practice-input'
+            name='pinyin'
+            aria-label='拼音输入'
+            autoComplete='off'
             value={value}
             onChange={(event) => handleChange(event.target.value)}
             onFocus={() => toggle()}
@@ -40,7 +44,7 @@ export default function FourLinesGrid(props: FourLinesGridProps) {
           capitalized={capitalized}
           original={original}
           modified={value}
-          cursor={focued}
+          cursor={focused}
           className={styles.dummyInput}
         />
       </div>

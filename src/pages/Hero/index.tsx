@@ -1,40 +1,61 @@
 import React from 'react'
-import {
-  Button,
-  Drawer,
-  Form,
-  Input,
-  List,
-  Modal,
-  Select,
-  Tooltip,
-  Typography,
-} from 'antd'
-import {
-  CloudDownloadOutlined,
-  CloudUploadOutlined,
-  GithubOutlined,
-  LoadingOutlined,
-  RedoOutlined,
-  SettingOutlined,
-} from '@ant-design/icons'
 import { useBoolean } from 'ahooks'
+import {
+  CloudDownload,
+  CloudUpload,
+  Github,
+  Loader2,
+  Redo2,
+  Settings,
+} from 'lucide-react'
 
 import useProfileBin from './useProfileBin'
-import styles from './index.module.less'
 
 import type { HanziCharConfig } from '@/core'
 
 import { CharType, Registry } from '@/core'
 import { Hanzi } from '@/components'
-
-const mouseEnterDelay = 0.5
+import { Button, buttonVariants } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+} from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 
 export default function Hero() {
   const schemaOptions = Registry.schema.getSchemaOptions()
   const textOptions = Registry.text.getTextOptions()
 
-  const [formRef] = Form.useForm()
   const {
     bin,
     onChangeBin,
@@ -50,12 +71,15 @@ export default function Hero() {
     inputTextIndex: 0,
     inputPinyin: '',
   })
-  const [visible, setVisible] = React.useState(false)
-  const [settingsVisible, { toggle: toggleSettingsVisible }] = useBoolean(false)
+  const [syncOpen, setSyncOpen] = React.useState(false)
+  const [settingsOpen, { toggle: toggleSettings, set: setSettingsOpen }] =
+    useBoolean(false)
+  const [binIdInput, setBinIdInput] = React.useState('')
+  const [nameInput, setNameInput] = React.useState('')
 
   const textConfig = React.useMemo(() => {
     return Registry.text.getTextConfig(bin?.textKey || textOptions[0]?.key)
-  }, [bin.textKey])
+  }, [bin.textKey, textOptions])
 
   const currentCharConfig = React.useMemo(() => {
     if (!textConfig) {
@@ -77,161 +101,241 @@ export default function Hero() {
 
   React.useEffect(() => {
     if (bin.inputPinyin && bin.inputPinyin === currentPinyin) {
-      // onChangeBin 需要函数式更新状态，否则后者 inputPinyin 的变化会重置
-      // inputTextIndex 的变化，导致无法切换到下一个字符。
+      // Functional update: otherwise inputPinyin clearing can race with index bump.
       onChangeBin({
         inputTextIndex: (bin?.inputTextIndex || 0) + 1,
         inputPinyin: '',
       })
     }
-  }, [currentPinyin, bin.inputPinyin, bin.inputTextIndex])
+  }, [currentPinyin, bin.inputPinyin, bin.inputTextIndex, onChangeBin])
 
   return (
-    <div className={styles.app}>
-      <div>
-        <Hanzi
-          zi={currentCharConfig?.char}
-          original={currentPinyin}
-          modified={bin.inputPinyin}
-          onChange={(value) => onChangeBin({ inputPinyin: value })}
-        />
-      </div>
-      <div className={styles.menu}>
-        <Input.Group compact>
-          <Button
-            icon={<SettingOutlined />}
-            onClick={() => toggleSettingsVisible()}
+    <TooltipProvider delay={500}>
+      <div className='relative flex h-svh w-svw items-center justify-center bg-muted/40'>
+        <div>
+          <Hanzi
+            zi={currentCharConfig?.char}
+            original={currentPinyin}
+            modified={bin.inputPinyin}
+            onChange={(value) => onChangeBin({ inputPinyin: value })}
           />
+        </div>
+
+        <div className='absolute bottom-1.5 mt-3 flex items-center gap-1'>
+          <Button
+            variant='outline'
+            size='icon'
+            onClick={() => toggleSettings()}
+            aria-label='打开控制面板'
+          >
+            <Settings className='size-4' />
+          </Button>
+
           <Select
-            style={{
-              width: 100,
-            }}
-            options={schemaOptions.map((item) => ({
+            value={bin.schemaType}
+            items={schemaOptions.map((item) => ({
               value: item.type,
               label: item.displayName,
             }))}
-            placeholder='拼写方案'
-            value={bin.schemaType}
-            onChange={(value) => onChangeBin({ schemaType: value })}
-          />
-          <Select
-            style={{
-              width: 130,
+            onValueChange={(value) => {
+              if (value != null) {
+                onChangeBin({ schemaType: String(value) })
+              }
             }}
-            options={textOptions.map((item) => ({
+          >
+            <SelectTrigger className='w-[100px]'>
+              <SelectValue placeholder='拼写方案' />
+            </SelectTrigger>
+            <SelectContent>
+              {schemaOptions.map((item) => (
+                <SelectItem key={item.type} value={item.type}>
+                  {item.displayName}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={bin.textKey}
+            items={textOptions.map((item) => ({
               value: item.key,
               label: item.title,
             }))}
-            placeholder='拼写模板'
-            value={bin.textKey}
-            onChange={(value) => {
-              onChangeBin({ inputTextIndex: 0, textKey: value })
+            onValueChange={(value) => {
+              if (value != null) {
+                onChangeBin({ inputTextIndex: 0, textKey: String(value) })
+              }
             }}
-          />
-          <Tooltip overlay='重置本地输入状态' mouseEnterDelay={mouseEnterDelay}>
-            <Button
-              onClick={() => {
-                onChangeBin({ inputTextIndex: 0, inputPinyin: '' })
-              }}
-              icon={<RedoOutlined />}
-            />
-          </Tooltip>
-          <Tooltip
-            overlay='同步本地状态到云端'
-            mouseEnterDelay={mouseEnterDelay}
           >
-            <Button
-              icon={
-                updateLoading ? <LoadingOutlined /> : <CloudUploadOutlined />
+            <SelectTrigger className='w-[130px]'>
+              <SelectValue placeholder='拼写模板' />
+            </SelectTrigger>
+            <SelectContent>
+              {textOptions.map((item) => (
+                <SelectItem key={item.key} value={item.key}>
+                  {item.title}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  variant='outline'
+                  size='icon'
+                  onClick={() => {
+                    onChangeBin({ inputTextIndex: 0, inputPinyin: '' })
+                  }}
+                  aria-label='重置本地输入状态'
+                />
               }
-              onClick={() => {
-                onUpload(() => setVisible(true))
-              }}
-            />
+            >
+              <Redo2 className='size-4' />
+            </TooltipTrigger>
+            <TooltipContent>重置本地输入状态</TooltipContent>
           </Tooltip>
-          <Tooltip
-            overlay='同步云端状态到本地'
-            mouseEnterDelay={mouseEnterDelay}
-          >
-            <Button
-              icon={
-                detailLoading ? <LoadingOutlined /> : <CloudDownloadOutlined />
+
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  variant='outline'
+                  size='icon'
+                  onClick={() => {
+                    onUpload(() => setSyncOpen(true))
+                  }}
+                  aria-label='同步本地状态到云端'
+                />
               }
-              onClick={() => {
-                onDownload(() => {
-                  setVisible(true)
-                })
-              }}
-            />
+            >
+              {updateLoading ? (
+                <Loader2 className='size-4 animate-spin' />
+              ) : (
+                <CloudUpload className='size-4' />
+              )}
+            </TooltipTrigger>
+            <TooltipContent>同步本地状态到云端</TooltipContent>
           </Tooltip>
-        </Input.Group>
+
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  variant='outline'
+                  size='icon'
+                  onClick={() => {
+                    onDownload(() => setSyncOpen(true))
+                  }}
+                  aria-label='同步云端状态到本地'
+                />
+              }
+            >
+              {detailLoading ? (
+                <Loader2 className='size-4 animate-spin' />
+              ) : (
+                <CloudDownload className='size-4' />
+              )}
+            </TooltipTrigger>
+            <TooltipContent>同步云端状态到本地</TooltipContent>
+          </Tooltip>
+        </div>
+
+        <Dialog open={syncOpen} onOpenChange={setSyncOpen}>
+          <DialogContent className='sm:max-w-md' showCloseButton>
+            <DialogHeader>
+              <DialogTitle>同步设置</DialogTitle>
+              <DialogDescription>
+                同步功能基于{' '}
+                <a
+                  href='https://jsonbin.io/'
+                  target='_blank'
+                  rel='noreferrer'
+                  className='underline underline-offset-3 hover:text-foreground'
+                >
+                  JSONbin
+                </a>{' '}
+                实现，可自行注册并创建一个公开 BIN 后将 BIN_ID
+                贴于此处确认即可。
+              </DialogDescription>
+            </DialogHeader>
+            <FieldGroup>
+              <Field>
+                <FieldLabel htmlFor='bin-id'>BIN_ID</FieldLabel>
+                <Input
+                  id='bin-id'
+                  value={binIdInput}
+                  onChange={(event) => setBinIdInput(event.target.value)}
+                />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor='user-name'>用户名</FieldLabel>
+                <Input
+                  id='user-name'
+                  value={nameInput}
+                  onChange={(event) => setNameInput(event.target.value)}
+                />
+                <FieldDescription>
+                  默认使用云端用户名，如果没有用户名会根据当前值创建。
+                </FieldDescription>
+              </Field>
+            </FieldGroup>
+            <p className='text-sm text-muted-foreground'>
+              当然，如果不想注册的话，可邮箱
+              <a
+                href='mailto:yuns.xie@qq.com'
+                className='underline underline-offset-3 hover:text-foreground'
+              >
+                联系我
+              </a>
+              为你创建 BIN_ID。
+            </p>
+            <DialogFooter>
+              <Button variant='outline' onClick={() => setSyncOpen(false)}>
+                取消
+              </Button>
+              <Button
+                onClick={() => {
+                  onSignIn(binIdInput, nameInput, {
+                    onOk: () => setSyncOpen(false),
+                  })
+                }}
+              >
+                确定
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        <Sheet open={settingsOpen} onOpenChange={setSettingsOpen}>
+          <SheetContent side='right' className='w-[360px] sm:max-w-[360px]'>
+            <SheetHeader>
+              <SheetTitle>控制面板</SheetTitle>
+            </SheetHeader>
+            <div className='flex flex-1 flex-col gap-4 px-4'>
+              <button
+                type='button'
+                className='rounded-lg border px-3 py-2 text-left text-sm hover:bg-muted'
+                onClick={onClearCache}
+              >
+                清除缓存
+              </button>
+            </div>
+            <div className='p-4'>
+              <a
+                href='https://github.com/yunsii/pinyin'
+                target='_blank'
+                rel='noreferrer'
+                className={cn(buttonVariants(), 'w-full')}
+              >
+                <Github className='size-4' />
+                Star
+              </a>
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
-      <Modal
-        width={480}
-        title='同步设置'
-        visible={visible}
-        cancelText='取消'
-        okText='确定'
-        onCancel={() => setVisible(false)}
-        onOk={() => {
-          const values = formRef.getFieldsValue()
-          onSignIn(values.binId, values.name, {
-            onOk: () => setVisible(false),
-          })
-        }}
-        destroyOnClose
-      >
-        <Form form={formRef}>
-          <Form.Item name='binId' label='BIN_ID'>
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name='name'
-            label='用户名'
-            extra={
-              <Typography.Text type='secondary'>
-                默认使用云端用户名，如果没有用户名会根据当前值创建。
-              </Typography.Text>
-            }
-          >
-            <Input />
-          </Form.Item>
-        </Form>
-        <Typography.Paragraph type='secondary'>
-          同步功能基于&nbsp;
-          <a href='https://jsonbin.io/' target='_blank' rel='noreferrer'>
-            JSONbin
-          </a>
-          &nbsp; 实现，可自行注册并创建一个公开 BIN 后将 BIN_ID
-          贴于此处确认即可。
-        </Typography.Paragraph>
-        <Typography.Text type='secondary'>
-          当然，如果不想注册的话，可邮箱
-          <a href='mailto:yuns.xie@qq.com' target='_blank' rel='noreferrer'>
-            联系我
-          </a>
-          为你创建 BIN_ID。
-        </Typography.Text>
-      </Modal>
-      <Drawer
-        width={360}
-        title={<Typography.Title level={4}>控制面板</Typography.Title>}
-        visible={settingsVisible}
-        onClose={() => toggleSettingsVisible()}
-      >
-        <List size='small' bordered className={styles.settingsList}>
-          <List.Item onClick={onClearCache}>清除缓存</List.Item>
-        </List>
-        <Button
-          type='primary'
-          icon={<GithubOutlined />}
-          className={styles.github}
-          href='https://github.com/theprimone/pinyin'
-          target='_blank'
-        >
-          Star
-        </Button>
-      </Drawer>
-    </div>
+    </TooltipProvider>
   )
 }

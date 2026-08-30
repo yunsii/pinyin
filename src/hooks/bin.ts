@@ -1,5 +1,5 @@
 import { useRequest } from 'ahooks'
-import { message } from 'antd'
+import { toast } from 'sonner'
 
 const BASE_URL = 'https://api.jsonbin.io/v3'
 
@@ -33,13 +33,13 @@ export function useBin() {
       manual: true,
       onSuccess(data) {
         if (data?.record?.name) {
-          message.success(`你好，${data?.record?.name} 😃`)
+          toast.success(`你好，${data?.record?.name} 😃`)
         } else {
-          message.warn('数据异常，请稍候重试 ☹️')
+          toast.warning('数据异常，请稍候重试 ☹️')
         }
       },
       onError() {
-        message.error('网络异常，请稍候重试 ☹️')
+        toast.error('网络异常，请稍候重试 ☹️')
       },
     },
   )
@@ -60,10 +60,10 @@ export function useUpdateBin() {
     {
       manual: true,
       onSuccess() {
-        message.success(`已同步本地数据 😃`)
+        toast.success('已同步本地数据 😃')
       },
       onError() {
-        message.warn('同步失败，请稍后重试 ☹️')
+        toast.warning('同步失败，请稍后重试 ☹️')
       },
     },
   )

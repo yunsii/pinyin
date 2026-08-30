@@ -1,28 +1,35 @@
-import React from 'react';
-import classNames from 'classnames';
+import React from 'react'
 
-import styles from './Grid.module.less';
+import styles from './Grid.module.css'
+
+import { cn } from '@/lib/utils'
 
 export interface GridProps {
-  capitalized?: boolean;
-  cursor?: boolean;
-  original?: string;
-  modified?: string;
-  style?: React.CSSProperties;
-  className?: string;
+  capitalized?: boolean
+  cursor?: boolean
+  original?: string
+  modified?: string
+  style?: React.CSSProperties
+  className?: string
 }
 
 export default function Grid(props: GridProps) {
-  const { original = '', modified = '', capitalized = true, cursor = false, style, className } = props;
+  const {
+    original = '',
+    modified = '',
+    capitalized = true,
+    cursor = false,
+    style,
+    className,
+  } = props
 
   const content = React.useMemo(() => {
-    const finalCharInputedIndex = modified.length - 1;
+    const finalCharInputedIndex = modified.length - 1
 
     if (original) {
       return (
         <div
-          className={classNames({
-            [styles.pinyin]: true,
+          className={cn(styles.pinyin, {
             [styles.captialized]: !!original.charAt(1) && capitalized,
           })}
         >
@@ -30,29 +37,37 @@ export default function Grid(props: GridProps) {
             return (
               <span
                 key={index}
-                className={classNames({
+                className={cn({
                   [styles.char]: true,
                   [styles.charInputed]: index <= finalCharInputedIndex,
-                  [styles.error]: modified[index] && original[index] !== modified[index],
+                  [styles.error]:
+                    modified[index] && original[index] !== modified[index],
                   [styles.cursor]: cursor && finalCharInputedIndex === index,
-                  [styles.emptyContentCursor]: cursor && finalCharInputedIndex === -1 && index === 0,
+                  [styles.emptyContentCursor]:
+                    cursor && finalCharInputedIndex === -1 && index === 0,
                 })}
               >
                 {item}
               </span>
-            );
+            )
           })}
         </div>
-      );
+      )
     }
-  }, [original, modified, cursor]);
+  }, [original, modified, cursor, capitalized])
 
   return (
-    <div className={classNames(styles.hero, className)} style={style}>
+    <div className={cn(styles.hero, className)} style={style}>
       {new Array(4).fill(0).map((_, index) => (
-        <div key={index} className={classNames(styles.line, styles[`line${index + 1}`])} />
+        <div
+          key={index}
+          className={cn(
+            styles.line,
+            styles[`line${index + 1}` as keyof typeof styles],
+          )}
+        />
       ))}
       {content}
     </div>
-  );
+  )
 }

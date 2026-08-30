@@ -1,52 +1,28 @@
-import * as path from 'path'
+/// <reference types="vitest/config" />
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-import { defineConfig } from 'vite'
+import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
-import vitePluginImp from 'vite-plugin-imp'
-import tsconfigPaths from 'vite-tsconfig-paths'
-import vitApp from '@vitjs/vit'
+import { defineConfig } from 'vite'
 
-// https://vitejs.dev/config/
+const rootDir = path.dirname(fileURLToPath(import.meta.url))
+
+// https://vite.dev/config/
 export default defineConfig({
   base: '/pinyin/',
-  plugins: [
-    react(),
-    tsconfigPaths(),
-    vitePluginImp({
-      libList: [
-        {
-          libName: 'antd',
-          style: (name) => `antd/es/${name}/style`,
-        },
-      ],
-    }),
-    vitApp({
-      reactStrictMode: true,
-      routes: [
-        {
-          path: '/',
-          component: './pages/Hero',
-        },
-      ],
-      exportStatic: {},
-    }),
-  ],
+  plugins: [react(), tailwindcss()],
+  resolve: {
+    alias: {
+      '@': path.resolve(rootDir, 'src'),
+    },
+  },
   server: {
     open: true,
     port: 8000,
   },
-  resolve: {
-    alias: [{ find: '@', replacement: path.resolve(__dirname, 'src') }],
-  },
-  css: {
-    modules: {
-      localsConvention: 'camelCaseOnly',
-    },
-    preprocessorOptions: {
-      less: {
-        modifyVars: { 'primary-color': '#13c2c2' },
-        javascriptEnabled: true,
-      },
-    },
+  test: {
+    environment: 'node',
+    include: ['src/**/*.test.ts'],
   },
 })

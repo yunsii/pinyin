@@ -1,2 +1,2 @@
-import '@/assets/schemes';
-import '@/assets/texts';
+import '@/assets/schemes'
+import '@/assets/texts'

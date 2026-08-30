@@ -1,4 +1,4 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-npx @jannajs/lint prepare-commit-msg $1
+# Optional emoji / prepare hook when @jannajs/lint is installed.
+if command -v npx >/dev/null 2>&1 && [ -f node_modules/@jannajs/lint/package.json ]; then
+  npx @jannajs/lint prepare-commit-msg "$1"
+fi

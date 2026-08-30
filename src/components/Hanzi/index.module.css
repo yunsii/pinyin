@@ -1,0 +1,22 @@
+.container {
+  border-radius: 16px;
+  background: oklch(0.97 0 0);
+  box-shadow:
+    -12px 12px 8px #dcdcdc,
+    12px -12px 8px #ffffff;
+  padding: 24px;
+  width: 248px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.zi {
+  font-size: 120px;
+  text-align: center;
+  width: 200px;
+  height: 200px;
+  user-select: none;
+  line-height: 200px;
+}

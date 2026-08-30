@@ -1,4 +1,4 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-npx @jannajs/lint verify-commit $1
+# Keep Conventional Commits soft-check if available; otherwise skip.
+if command -v npx >/dev/null 2>&1 && [ -f node_modules/@jannajs/lint/package.json ]; then
+  npx @jannajs/lint verify-commit "$1"
+fi
